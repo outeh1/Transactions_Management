@@ -16,7 +16,11 @@ public class MinimalbeispielSqlLite {
 	 * Opens a Databaseconnection and does Stuff with it
 	 */
 	public static void main(String[] args) {
-		final String url = "jdbc:sqlite:helloFhdw.sqlite.db";
+		final String mysqliteURL = "jdbc:sqlite:helloFhdw.sqlite.db";
+		final String mariadbURL = "jdbc:mariadb://localhost:3306/test?user=outeh";
+		final String postgreSQLURL = "jdbc:postgresql://localhost/postgres?user=outeh";
+		
+		final String url = postgreSQLURL;
 		try ( final Connection conn = DriverManager . getConnection ( url )) {
 			System.out.println("Verbunden mit Datenbank" + url);
 			/*
