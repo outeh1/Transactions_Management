@@ -42,7 +42,7 @@ public class MinimalbeispielSqlLite {
 			kundenListing(conn);
 				
 			}
-			catch (SQLException e) {
+		catch (SQLException e) {
 				e.printStackTrace();
 			}
 			
