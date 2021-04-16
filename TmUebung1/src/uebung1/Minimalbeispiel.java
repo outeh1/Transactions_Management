@@ -121,7 +121,9 @@ public class Minimalbeispiel {
 			final ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				BigDecimal kontostandVon = rs.getBigDecimal("betrag");
-				System.out.printf("Der Kontostand von %s beträgt %s%n", von, kontostandVon);
+				if (Verbosity) {
+					System.out.printf("Der Kontostand von %s beträgt %s%n", von, kontostandVon);
+				}
 				kontostandVon = kontostandVon.subtract(betrag);
 
 				changeKontostand(conn, von, kontostandVon);
@@ -130,7 +132,9 @@ public class Minimalbeispiel {
 			final ResultSet rs1 = stmt.executeQuery();
 			if (rs1.next()) {
 				BigDecimal kontostandNach = rs1.getBigDecimal("betrag");
-				System.out.printf("Der Kontostand von %s beträgt %s%n", nach, kontostandNach);
+				if (Verbosity) {
+					System.out.printf("Der Kontostand von %s beträgt %s%n", nach, kontostandNach);
+				}
 				kontostandNach = kontostandNach.add(betrag);
 
 				changeKontostand(conn, nach, kontostandNach);
