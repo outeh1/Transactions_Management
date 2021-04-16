@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Minimalbeispiel {
+	public static boolean Verbosity = true;
 	private static final String deleteKontenSQL = "DELETE FROM konten;";
 	private static final String insertUsersSQL = "INSERT INTO konten(kto, betrag, kunde) VALUES (1, 1000, 'A'), (2, 1000, 'B'), (3, 1000, 'C');";
 
@@ -44,6 +45,17 @@ public class Minimalbeispiel {
 	}
 
 	/**
+	 * toggles verbosity
+	 */
+	public static void toggleVerbose() {
+		if (Verbosity) {
+			Verbosity = false;
+		} else {
+			Verbosity = true;
+		}
+	}
+
+	/**
 	 * Lists every "kunde" and his "betrag"
 	 */
 	public static void kundenListing(Connection conn) {
@@ -52,9 +64,13 @@ public class Minimalbeispiel {
 				while (rs.next()) {
 					final String kunde = rs.getString("kunde");
 					final BigDecimal kontostand = rs.getBigDecimal("betrag");
-					System.out.printf("Kunde %s hat %s Geldeinheiten%n", kunde, kontostand);
+					if (Verbosity) {
+						System.out.printf("Kunde %s hat %s Geldeinheiten%n", kunde, kontostand);
+					}
 				}
-				System.out.println("Ende aller Kunden");
+				if (Verbosity) {
+					System.out.println("Ende aller Kunden");
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -73,23 +89,28 @@ public class Minimalbeispiel {
 			stmt.setString(1, kunde);
 			final ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				BigDecimal kontostandVon = rs.getBigDecimal("betrag");
-				System.out.printf("Der Kontostand von %s beträgt %s%n", kunde, kontostandVon);
-				kontostandVon = betrag;
-				System.out.printf("der Kontostand von %s soll geänder werden, auf %s%n", kunde, kontostandVon);
-
+				BigDecimal kontostand = rs.getBigDecimal("betrag");
+				if (Verbosity) {
+					System.out.printf("Der Kontostand von %s beträgt %s%n", kunde, kontostand);
+				}
+				kontostand = betrag;
+				if (Verbosity) {
+					System.out.printf("der Kontostand von %s soll geänder werden, auf %s%n", kunde, kontostand);
+				}
 				try (final PreparedStatement us = conn.prepareStatement(updateBetrag)) {
-					us.setBigDecimal(1, kontostandVon);
+					us.setBigDecimal(1, kontostand);
 					us.setString(2, kunde);
 					int count = us.executeUpdate();
 					if (count == 1) {
-						System.out.println("Kontostand erfolgreich geändert");
+						if (Verbosity) {
+							System.out.println("Kontostand erfolgreich geändert");
+						}
 					}
 				}
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -116,7 +137,7 @@ public class Minimalbeispiel {
 
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 	}
@@ -133,7 +154,7 @@ public class Minimalbeispiel {
 			stmt.executeUpdate(insertUsersSQL);
 			System.out.println("Users inserted.");
 		} catch (SQLException e) {
-			System.out.println("Database " + conn + " didn't like being reset.");
+			System.err.println("Database " + conn + " didn't like being reset.");
 			;
 			e.printStackTrace();
 		}
