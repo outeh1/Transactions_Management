@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Minimalbeispiel {
-	public static boolean Verbosity = true;
+	private static boolean Verbosity = true;
 	private static final String deleteKontenSQL = "DELETE FROM konten;";
 	private static final String insertUsersSQL = "INSERT INTO konten(kto, betrag, kunde) VALUES (1, 1000, 'A'), (2, 1000, 'B'), (3, 1000, 'C');";
 
@@ -57,32 +57,28 @@ public class Minimalbeispiel {
 
 	/**
 	 * Lists every "kunde" and his "betrag"
+	 * 
+	 * @throws SQLException
 	 */
-	public static void kundenListing(Connection conn) {
+	public static void kundenListing(Connection conn) throws SQLException {
 		try (final Statement stmt = conn.createStatement()) {
 			try (ResultSet rs = stmt.executeQuery("Select kunde, betrag from konten")) {
 				while (rs.next()) {
 					final String kunde = rs.getString("kunde");
 					final BigDecimal kontostand = rs.getBigDecimal("betrag");
-					if (Verbosity) {
-						System.out.printf("Kunde %s hat %s Geldeinheiten%n", kunde, kontostand);
-					}
+					System.out.printf("Kunde %s hat %s Geldeinheiten%n", kunde, kontostand);
 				}
-				if (Verbosity) {
-					System.out.println("Ende aller Kunden");
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+				System.out.println("Ende aller Kunden");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * changes the "betrag" of a "kunde" to a desired new value
+	 * 
+	 * @throws SQLException
 	 */
-	private static void changeKontostand(Connection conn, String kunde, BigDecimal betrag) {
+	private static void changeKontostand(Connection conn, String kunde, BigDecimal betrag) throws SQLException {
 		final String selectBetrag = "Select betrag From konten Where kunde = ?";
 		final String updateBetrag = "Update konten Set betrag = ? Where kunde = ?";
 		try (final PreparedStatement stmt = conn.prepareStatement(selectBetrag)) {
@@ -109,12 +105,10 @@ public class Minimalbeispiel {
 				}
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
-	public static void bankTransfer(Connection conn, String von, String nach, BigDecimal betrag) {
+	public static void bankTransfer(Connection conn, String von, String nach, BigDecimal betrag) throws SQLException {
 		final String selectBetrag = "Select betrag From konten Where kunde = ?";
 		try (final PreparedStatement stmt = conn.prepareStatement(selectBetrag)) {
 			stmt.setString(1, von);
@@ -140,8 +134,6 @@ public class Minimalbeispiel {
 				changeKontostand(conn, nach, kontostandNach);
 
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 	}

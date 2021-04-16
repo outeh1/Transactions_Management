@@ -13,26 +13,32 @@ public class TransferThread extends RunnableAdapter {
 	private final String sourceAccount;
 	private final String targetAccount;
 	private final BigDecimal amount;
+	private final Integer TransferNum;
+	private Integer ErrorNum = 0;
 
-	public TransferThread(String connString, String source, String target, BigDecimal amount) {
+	public TransferThread(String connString, String source, String target, BigDecimal amount, Integer TransferNum) {
 		super();
 		this.connectionString = connString;
 		this.sourceAccount = source;
 		this.targetAccount = target;
 		this.amount = amount;
+		this.TransferNum = TransferNum;
 	}
 
 	@Override
 	public void run() {
 		try (Connection conn = DriverManager.getConnection(this.connectionString)) {
-			for (int i = 0; i < 1000; i++) {
+			for (int i = 0; i < this.TransferNum; i++) {
 				uebung1.Minimalbeispiel.bankTransfer(conn, this.sourceAccount, this.targetAccount, this.amount);
 				this.delay(200);
 			}
-			System.out.printf("%s hat Überweisungen ausgeführt.%n", this.getWhereIRunIn());
+			// System.out.printf("%s hat Überweisungen ausgeführt.%n",
+			// this.getWhereIRunIn());
 		} catch (SQLException e) {
-			// TODO: handle exception
+			ErrorNum++;
+			// e.printStackTrace();
 		}
+		System.err.println("There where: " + ErrorNum + " Errors");
 
 	}
 
