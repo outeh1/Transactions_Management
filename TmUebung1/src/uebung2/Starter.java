@@ -18,8 +18,8 @@ public class Starter {
 		final String mariadbURL = "jdbc:mariadb://localhost:3306/test?user=outeh";
 		final String postgreSQLURL = "jdbc:postgresql://localhost/postgres?user=outeh";
 
-		final String[] urls = { mysqliteURL };
-		// final String[] urls = {postgreSQLURL,mariadbURL,mysqliteURL};
+		// final String[] urls = { mysqliteURL };
+		final String[] urls = { postgreSQLURL, mariadbURL, mysqliteURL };
 		for (String url : urls) {
 			try (final Connection conn = DriverManager.getConnection(url)) {
 				System.out.println("Verbunden mit Datenbank" + url);
@@ -28,7 +28,7 @@ public class Starter {
 				 * "kunde" TEXT NOT NULL, PRIMARY KEY("kto") );
 				 */
 				uebung1.Minimalbeispiel.ResetTable(conn);
-				uebung1.Minimalbeispiel.kundenListing(conn);
+//				uebung1.Minimalbeispiel.kundenListing(conn);
 
 				List<TransferThread> Threads = new ArrayList<TransferThread>();
 				for (int i = 0; i < TransferThreadNum; i++) {

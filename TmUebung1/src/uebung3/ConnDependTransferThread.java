@@ -2,22 +2,22 @@ package uebung3;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import baseStuff.RunnableAdapter;
 
-public class TransferThread extends RunnableAdapter {
-	private final String connectionString;
+public class ConnDependTransferThread extends RunnableAdapter {
+	private final Connection conn;
 	private final String sourceAccount;
 	private final String targetAccount;
 	private final BigDecimal amount;
 	private final Integer TransferNum;
 	private Integer ErrorNum = 0;
 
-	public TransferThread(String connString, String source, String target, BigDecimal amount, Integer TransferNum) {
+	public ConnDependTransferThread(Connection conn, String source, String target, BigDecimal amount,
+			Integer TransferNum) {
 		super();
-		this.connectionString = connString;
+		this.conn = conn;
 		this.sourceAccount = source;
 		this.targetAccount = target;
 		this.amount = amount;
@@ -26,7 +26,7 @@ public class TransferThread extends RunnableAdapter {
 
 	@Override
 	public void run() {
-		try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+		try {
 			conn.setAutoCommit(false);
 			for (int i = 0; i < this.TransferNum; i++) {
 				uebung1.Minimalbeispiel.bankTransfer(conn, this.sourceAccount, this.targetAccount, this.amount);
@@ -39,12 +39,13 @@ public class TransferThread extends RunnableAdapter {
 				conn.commit();
 			}
 
-			// conn.rollback();
-
 		} catch (SQLException e) {
 			ErrorNum++;
 			e.printStackTrace();
 		}
+
+		// conn.rollback();
+
 		System.err.println("There where: " + ErrorNum + " Errors");
 
 	}
