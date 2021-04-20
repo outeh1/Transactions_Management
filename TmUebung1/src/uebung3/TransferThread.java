@@ -36,7 +36,6 @@ public class TransferThread extends RunnableAdapter {
 					conn.commit();
 				}
 				this.delay(200);
-				conn.commit();
 			}
 
 			// conn.rollback();

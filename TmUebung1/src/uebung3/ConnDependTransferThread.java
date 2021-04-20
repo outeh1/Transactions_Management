@@ -36,7 +36,6 @@ public class ConnDependTransferThread extends RunnableAdapter {
 					conn.commit();
 				}
 				this.delay(200);
-				conn.commit();
 			}
 
 		} catch (SQLException e) {
