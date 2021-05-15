@@ -10,16 +10,16 @@ import uebung7.Kommando.Typ;
 public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 
 	private TransGraph Graph;
-	private Map<String, Set<Integer>> writeSet;
-	private Map<String, Set<Integer>> readSet;
+	private Map<String, Set<Integer>> Writes;
+	private Map<String, Set<Integer>> Reads;
 	private Set<Integer> finished;
 	private boolean AllesKlar = true;
 	DatenelementKommando c = null;
 
 	public KonfliktGraphTester() {
 		this.Graph = new TransGraph();
-		this.writeSet = new HashMap<String, Set<Integer>>();
-		this.readSet = new HashMap<String, Set<Integer>>();
+		this.Writes = new HashMap<String, Set<Integer>>();
+		this.Reads = new HashMap<String, Set<Integer>>();
 		this.finished = new HashSet<Integer>();
 	}
 
@@ -42,8 +42,8 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 		else if (k.getTyp() == Typ.READ) {
 			putIntoWrites(c);
 			putIntoReads(c);
-			readSet.get(c.getX()).add(i);
-			for (Integer oldWrite : this.writeSet.get(c.getX())) {
+			Reads.get(c.getX()).add(i);
+			for (Integer oldWrite : this.Writes.get(c.getX())) {
 				if (oldWrite != i) {
 					AllesKlar = Graph.Transput(oldWrite, i);
 				}
@@ -52,16 +52,16 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 
 		else if (k.getTyp() == Typ.WRITE) {
 			putIntoWrites(c);
-			writeSet.get(c.getX()).add(i);
+			Writes.get(c.getX()).add(i);
 
 			// (w,i), für alle w aus write(x)
-			for (Integer oldWrite : this.writeSet.get(c.getX())) {
+			for (Integer oldWrite : this.Writes.get(c.getX())) {
 				if (oldWrite != i) {
 					AllesKlar = Graph.Transput(oldWrite, i);
 				}
 			}
 			// (r,i), wenn r!=i und r aus read(x)
-			for (Integer oldRead : this.readSet.get(c.getX())) {
+			for (Integer oldRead : this.Reads.get(c.getX())) {
 				if (oldRead != i) {
 					if (oldRead != i) {
 						AllesKlar = Graph.Transput(oldRead, i);
@@ -82,14 +82,14 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 	}
 
 	private void putIntoReads(DatenelementKommando k) {
-		if (!readSet.containsKey(c.getX())) {
-			readSet.put(c.getX(), new HashSet<Integer>());
+		if (!Reads.containsKey(c.getX())) {
+			Reads.put(c.getX(), new HashSet<Integer>());
 		}
 	}
 
 	private void putIntoWrites(DatenelementKommando k) {
-		if (!writeSet.containsKey(k.getX())) {
-			writeSet.put(k.getX(), new HashSet<Integer>());
+		if (!Writes.containsKey(k.getX())) {
+			Writes.put(k.getX(), new HashSet<Integer>());
 		}
 	}
 }
