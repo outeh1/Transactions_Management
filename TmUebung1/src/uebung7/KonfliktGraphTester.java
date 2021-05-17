@@ -13,7 +13,6 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 	private Map<String, Set<Integer>> Writes;
 	private Map<String, Set<Integer>> Reads;
 	private Set<Integer> finished;
-	private boolean AllesKlar = true;
 	DatenelementKommando c = null;
 
 	public KonfliktGraphTester() {
@@ -25,7 +24,6 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 
 	@Override
 	public void process(Kommando k, int i) {
-		AllesKlar = true;
 
 		try {
 			this.c = (DatenelementKommando) k;
@@ -45,7 +43,10 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 			Reads.get(c.getX()).add(i);
 			for (Integer oldWrite : this.Writes.get(c.getX())) {
 				if (oldWrite != i) {
-					AllesKlar = Graph.Transput(oldWrite, i);
+					if (!Graph.Transput(oldWrite, i)) {
+						this.commandIngnore(k, i);
+						return;
+					}
 				}
 			}
 		}
@@ -57,27 +58,29 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 			// (w,i), für alle w aus write(x)
 			for (Integer oldWrite : this.Writes.get(c.getX())) {
 				if (oldWrite != i) {
-					AllesKlar = Graph.Transput(oldWrite, i);
+					if (!Graph.Transput(oldWrite, i)) {
+						this.commandIngnore(k, i);
+						return;
+					}
 				}
 			}
 			// (r,i), wenn r!=i und r aus read(x)
 			for (Integer oldRead : this.Reads.get(c.getX())) {
 				if (oldRead != i) {
 					if (oldRead != i) {
-						AllesKlar = Graph.Transput(oldRead, i);
+						if (!Graph.Transput(oldRead, i)) {
+							this.commandIngnore(k, i);
+							return;
+						}
 					}
 				}
 			}
 		}
-		if (AllesKlar) {
-			// Keine Zyklen
-			this.commandExecute(k, i);
-		} else {
-			// Wenn Zyklen da sind
-			this.commandIngnore(k, i);
-//			this.removeAbortedTransitions(i);
 
-		}
+		// Keine Zyklen
+		this.commandExecute(k, i);
+
+//			this.removeAbortedTransitions(i); fehlt noch bei allen ignore commands
 
 	}
 

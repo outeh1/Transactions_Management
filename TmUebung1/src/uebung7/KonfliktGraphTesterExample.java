@@ -20,42 +20,42 @@ public class KonfliktGraphTesterExample {
 		Kommando wB = new WriteKommando("B");
 		Kommando commit = Kommando.COMMIT;
 
-//		AbstractKonfliktGraphTester kgt = new KonfliktGraphTester();
-//		kgt.process(rA, 1);
-//		kgt.process(wA, 1);
-//		kgt.process(rB, 1);
-//		kgt.process(wB, 1);
-//		kgt.process(commit, 1);
+		AbstractKonfliktGraphTester kgt1 = new KonfliktGraphTester();
+		kgt1.process(rA, 1);
+		kgt1.process(wA, 1);
+		kgt1.process(rB, 1);
+		kgt1.process(wB, 1);
+		kgt1.process(commit, 1);
 
-//		AbstractKonfliktGraphTester kgt = new KonfliktGraphTester();
-//		kgt.process(rA, 1);
-//		kgt.process(wA, 1);
-//		kgt.process(rA, 3);
-//		kgt.process(rB, 1);
-//		kgt.process(wB, 1);
-//		kgt.process(rA, 2);
-//		kgt.process(wA, 2);
-//		kgt.process(wB, 3);
-//		kgt.process(rB, 2);
-//		kgt.process(wB, 2);
-//		kgt.process(commit, 1);
-//		kgt.process(commit, 2);
-//		kgt.process(commit, 3);
+		AbstractKonfliktGraphTester kgt2 = new KonfliktGraphTester();
+		kgt2.process(rA, 1);
+		kgt2.process(wA, 1);
+		kgt2.process(rA, 3);
+		kgt2.process(rB, 1);
+		kgt2.process(wB, 1);
+		kgt2.process(rA, 2);
+		kgt2.process(wA, 2);
+		kgt2.process(wB, 3);
+		kgt2.process(rB, 2);
+		kgt2.process(wB, 2);
+		kgt2.process(commit, 1);
+		kgt2.process(commit, 2);
+		kgt2.process(commit, 3);
 
-		AbstractKonfliktGraphTester kgt = new KonfliktGraphTester();
-		kgt.process(rA, 3);
-		kgt.process(rA, 1);
-		kgt.process(wA, 1);
-		kgt.process(rB, 1);
-		kgt.process(wB, 1);
-		kgt.process(rA, 2);
-		kgt.process(wA, 2);
-		kgt.process(rB, 2);
-		kgt.process(wB, 2);
-		kgt.process(wB, 3);
-		kgt.process(commit, 1);
-		kgt.process(commit, 2);
-		kgt.process(commit, 3);
+		AbstractKonfliktGraphTester kgt3 = new KonfliktGraphTester();
+		kgt3.process(rA, 3);
+		kgt3.process(rA, 1);
+		kgt3.process(wA, 1);
+		kgt3.process(rB, 1);
+		kgt3.process(wB, 1);
+		kgt3.process(rA, 2);
+		kgt3.process(wA, 2);
+		kgt3.process(rB, 2);
+		kgt3.process(wB, 2);
+		kgt3.process(wB, 3);
+		kgt3.process(commit, 1);
+		kgt3.process(commit, 2);
+		kgt3.process(commit, 3);
 
 	}
 
