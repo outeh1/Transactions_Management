@@ -13,7 +13,6 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 	private Map<String, Set<Integer>> Writes;
 	private Map<String, Set<Integer>> Reads;
 	private Set<Integer> finished;
-	DatenelementKommando c = null;
 
 	public KonfliktGraphTester() {
 		this.Graph = new TransGraph();
@@ -25,12 +24,7 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 	@Override
 	public void process(Kommando k, int i) {
 
-		try {
-			this.c = (DatenelementKommando) k;
-		} catch (Exception e) {
-
-		}
-
+		DatenelementKommando c;
 		if (k.getTyp() == Typ.COMMIT) {
 			this.commandExecute(k, i);
 			this.finished.add(i);
@@ -38,6 +32,7 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 		}
 
 		else if (k.getTyp() == Typ.READ) {
+			c = (DatenelementKommando) k;
 			putIntoWrites(c);
 			putIntoReads(c);
 			Reads.get(c.getX()).add(i);
@@ -52,6 +47,7 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 		}
 
 		else if (k.getTyp() == Typ.WRITE) {
+			c = (DatenelementKommando) k;
 			putIntoWrites(c);
 			Writes.get(c.getX()).add(i);
 
@@ -84,15 +80,15 @@ public class KonfliktGraphTester extends AbstractKonfliktGraphTester {
 
 	}
 
-	private void putIntoReads(DatenelementKommando k) {
+	private void putIntoReads(DatenelementKommando c) {
 		if (!Reads.containsKey(c.getX())) {
 			Reads.put(c.getX(), new HashSet<Integer>());
 		}
 	}
 
-	private void putIntoWrites(DatenelementKommando k) {
-		if (!Writes.containsKey(k.getX())) {
-			Writes.put(k.getX(), new HashSet<Integer>());
+	private void putIntoWrites(DatenelementKommando c) {
+		if (!Writes.containsKey(c.getX())) {
+			Writes.put(c.getX(), new HashSet<Integer>());
 		}
 	}
 }
